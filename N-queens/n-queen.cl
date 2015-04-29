@@ -18,7 +18,7 @@ int ismeet(int r1, int c1, int r2, int c2){
 	return 0;
 }
 
-int conflict( __local int* pos, int row, int col ){
+int cnflict( __local int* pos, int row, int col ){
 	int i;
 	for(i=0; i<row; i++){
 		if( ismeet( i, pos[i], row, col ) ){
@@ -28,8 +28,7 @@ int conflict( __local int* pos, int row, int col ){
 	return 0;
 }
 
-//__kernel void nqueen( __global int *num_queen_ptr, __local int *pos ){
-__kernel void nqueen( __global int *num_queen_ptr, __local int *pos, __global int *mutex /*__local char *__print_buf*/ ){
+__kernel void nqueen( __global int *num_queen_ptr, __local int *pos, __global int *mutex ){
 	int row, col, i;
 	int queen_placed;
 	int global_id = get_global_id(0);
@@ -39,11 +38,8 @@ __kernel void nqueen( __global int *num_queen_ptr, __local int *pos, __global in
 		pos[i] = -1;
 	}
 
-	//row = 0;
 	row = 1;
 	pos[0] = global_id;
-	//printf( "id = %d\n", pos[0] );
-	//while( row >= 0 ){
 	while(row >= 1){
 		queen_placed = 0;
 		for( col=pos[row]+1; col<num_queen; col++){

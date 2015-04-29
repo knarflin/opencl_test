@@ -80,7 +80,15 @@ int main(void)
 	 
 	/* Build Kernel Program */
 	ret = clBuildProgram(program, 1, &device_id, NULL, NULL, NULL);
+	//checkerror( ret, __LINE__ );
+
+	cl_build_status ret_build_status;
+	char* ret_build_log = (char *)malloc( sizeof(char) * MAX_STRING_LEN );
+	ret = clGetProgramBuildInfo( program, device_id, CL_PROGRAM_BUILD_STATUS, sizeof(cl_build_status), &ret_build_status, NULL );
 	checkerror( ret, __LINE__ );
+	ret = clGetProgramBuildInfo( program, device_id, CL_PROGRAM_BUILD_LOG, MAX_STRING_LEN, ret_build_log, NULL );
+	checkerror( ret, __LINE__ );
+	fputs( ret_build_log, stdout );
 	 
 	/* Create OpenCL Kernel */
 	kernel = clCreateKernel(program, "nqueen", &ret);
